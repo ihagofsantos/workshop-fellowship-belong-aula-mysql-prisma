@@ -1,0 +1,57 @@
+// Schema Prisma - Define a estrutura do banco de dados
+// Este arquivo substitui as entidades TypeScript do TypeORM
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Aluno {
+  id              Int        @id @default(autoincrement())
+  nome            String     @db.VarChar(100)
+  email           String     @unique @db.VarChar(100)
+  idade           Int?
+  telefone        String?    @db.VarChar(20)
+  dataNascimento  DateTime?
+  ativo           Boolean    @default(true)
+  createdAt       DateTime   @default(now())
+
+  matriculas Matricula[]
+
+  @@map("alunos")
+}
+
+model Disciplina {
+  id           Int      @id @default(autoincrement())
+  nome         String   @db.VarChar(100)
+  codigo       String   @unique @db.VarChar(20)
+  cargaHoraria Int
+  professor    String?  @db.VarChar(100)
+  descricao    String?  @db.Text
+  ativa        Boolean  @default(true)
+
+  matriculas Matricula[]
+
+  @@map("disciplinas")
+}
+
+model Matricula {
+  id            Int       @id @default(autoincrement())
+  alunoId       Int
+  disciplinaId  Int
+  dataMatricula DateTime  @default(now())
+  semestre      String?   @db.VarChar(10)
+  nota          Decimal?  @db.Decimal(5, 2)
+  status        String    @default("ativa") @db.VarChar(20)
+  observacoes    String?
+
+  aluno      Aluno       @relation(fields: [alunoId], references: [id], onDelete: Cascade)
+  disciplina Disciplina  @relation(fields: [disciplinaId], references: [id], onDelete: Cascade)
+
+  @@unique([alunoId, disciplinaId])
+  @@map("matriculas")
+}
