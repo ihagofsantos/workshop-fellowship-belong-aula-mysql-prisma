@@ -133,6 +133,8 @@ USE escola;
 - Integridade dos dados garantida
 - Linguagem SQL padrão
 - Ideal para dados estruturados
+- **Linhas** são chamadas de registros
+- **Colunas** são chamadas de atributos
 
 ### Banco de Dados Não Relacional (NoSQL)
 
